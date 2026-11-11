@@ -1,0 +1,238 @@
+---
+import { portfolioData } from '../data/portfolioData';
+---
+
+<section id="contact" class="py-20 sm:py-28 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="flex flex-col items-center text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 text-xs font-mono font-medium mb-3">
+        <span>// CONTATO &amp; CONEXÃO</span>
+      </div>
+      <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white tracking-tight">
+        Vamos Conversar sobre Engenharia e Oportunidades?
+      </h2>
+      <p class="text-slate-400 text-base max-w-2xl mt-4">
+        Disponível para projetos corporativos sob medida, consultoria técnica em TI e desenvolvimento de software corporativo.
+      </p>
+    </div>
+
+    <!-- Contact Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column: Direct Connection Cards with Professional SVGs -->
+      <div class="lg:col-span-5 flex flex-col gap-4">
+        
+        <!-- WhatsApp Card -->
+        <a
+          href={portfolioData.personal.whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="glass-panel rounded-2xl p-5 border border-white/10 hover:border-white/30 hover:-translate-y-1 flex items-center gap-4 transition-all group"
+        >
+          <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/15 text-white flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <div>
+            <div class="text-xs font-mono text-slate-400 font-semibold tracking-wider uppercase">Conversa Direta</div>
+            <div class="text-white font-semibold text-base">WhatsApp Comercial</div>
+            <div class="text-slate-400 text-xs mt-0.5">{portfolioData.personal.whatsapp}</div>
+          </div>
+        </a>
+
+        <!-- Email Card -->
+        <a
+          href={`mailto:${portfolioData.personal.email}`}
+          class="glass-panel rounded-2xl p-5 border border-white/10 hover:border-white/30 hover:-translate-y-1 flex items-center gap-4 transition-all group"
+        >
+          <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/15 text-white flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <div class="text-xs font-mono text-slate-400 font-semibold tracking-wider uppercase">E-mail Profissional</div>
+            <div class="text-white font-semibold text-base">Enviar Mensagem</div>
+            <div class="text-slate-400 text-xs mt-0.5">{portfolioData.personal.email}</div>
+          </div>
+        </a>
+
+        <!-- LinkedIn Card -->
+        <a
+          href={portfolioData.personal.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="glass-panel rounded-2xl p-5 border border-white/10 hover:border-white/30 hover:-translate-y-1 flex items-center gap-4 transition-all group"
+        >
+          <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/15 text-white flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-xs font-mono text-slate-400 font-semibold tracking-wider uppercase">Rede Profissional</div>
+            <div class="text-white font-semibold text-base">LinkedIn</div>
+            <div class="text-slate-400 text-xs mt-0.5">linkedin.com/in/heltonj866</div>
+          </div>
+        </a>
+
+        <!-- GitHub Card -->
+        <a
+          href={portfolioData.personal.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="glass-panel rounded-2xl p-5 border border-white/10 hover:border-white/30 hover:-translate-y-1 flex items-center gap-4 transition-all group"
+        >
+          <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/15 text-white flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-xs font-mono text-slate-400 font-semibold tracking-wider uppercase">Repositórios de Código</div>
+            <div class="text-white font-semibold text-base">GitHub</div>
+            <div class="text-slate-400 text-xs mt-0.5">github.com/heltonj866</div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Right Column: Interactive Form -->
+      <div class="lg:col-span-7 glass-panel rounded-3xl p-6 sm:p-8">
+        <h3 class="font-heading font-bold text-xl text-white mb-2">
+          Envie uma Mensagem Direta
+        </h3>
+        <p class="text-slate-400 text-xs sm:text-sm mb-6">
+          Preencha o formulário abaixo para propor projetos corporativos, plataformas SaaS ou parcerias técnicas.
+        </p>
+
+        <form id="contact-form" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-xs font-mono text-slate-300 uppercase mb-1.5">
+                Nome Completo *
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                placeholder="Ex: Carlos Silva"
+                class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-white/30 transition-colors"
+              />
+            </div>
+
+            <div>
+              <label for="email" class="block text-xs font-mono text-slate-300 uppercase mb-1.5">
+                E-mail Profissional *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="Ex: carlos@empresa.com"
+                class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-white/30 transition-colors"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="subject" class="block text-xs font-mono text-slate-300 uppercase mb-1.5">
+              Assunto / Escopo da Demanda
+            </label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="Ex: Desenvolvimento de Plataforma SaaS / Automação"
+              class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-white/30 transition-colors"
+            />
+          </div>
+
+          <div>
+            <label for="message" class="block text-xs font-mono text-slate-300 uppercase mb-1.5">
+              Mensagem *
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              required
+              placeholder="Descreva aqui o contexto e objetivos da mensagem..."
+              class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-white/30 transition-colors resize-none"
+            ></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full py-3.5 rounded-xl bg-white hover:bg-slate-200 text-black font-semibold text-sm shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] transition-all"
+          >
+            <span>Transmitir Mensagem</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+
+          <!-- Feedback Status Box -->
+          <div id="form-feedback" class="hidden p-3.5 rounded-xl text-center text-xs font-mono"></div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import confetti from 'canvas-confetti';
+
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const feedback = document.getElementById('form-feedback');
+  const submitBtn = document.getElementById('submit-btn');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if (!form.checkValidity()) return;
+
+    if (submitBtn) {
+      submitBtn.setAttribute('disabled', 'true');
+      submitBtn.textContent = 'Processando...';
+    }
+
+    const name = (document.getElementById('name') as HTMLInputElement)?.value;
+    const email = (document.getElementById('email') as HTMLInputElement)?.value;
+    const subject = (document.getElementById('subject') as HTMLInputElement)?.value || 'Contato Profissional';
+    const message = (document.getElementById('message') as HTMLTextAreaElement)?.value;
+
+    setTimeout(() => {
+      confetti({
+        particleCount: 50,
+        spread: 40,
+        origin: { y: 0.7 },
+        colors: ['#ffffff', '#cbd5e1', '#94a3b8']
+      });
+
+      if (feedback) {
+        feedback.classList.remove('hidden');
+        feedback.className = 'p-3.5 rounded-xl text-center text-xs font-mono bg-white/5 border border-white/20 text-white block';
+        feedback.innerHTML = `<strong>Mensagem registrada com sucesso.</strong><br>Obrigado pelo contato, ${name}. Você também pode utilizar o WhatsApp para agilidade.`;
+      }
+
+      const mailtoUrl = `mailto:heltonj866@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Nome: ${name}\nE-mail: ${email}\n\n${message}`)}`;
+      window.location.href = mailtoUrl;
+
+      form.reset();
+      if (submitBtn) {
+        submitBtn.removeAttribute('disabled');
+        submitBtn.innerHTML = '<span>Mensagem Enviada</span>';
+      }
+    }, 500);
+  });
+</script>

@@ -1,0 +1,61 @@
+---
+import { portfolioData } from '../data/portfolioData';
+---
+
+<section id="process" class="py-20 sm:py-28 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Header -->
+    <div class="flex flex-col items-center text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 text-xs font-mono font-medium mb-3">
+        <span>// METODOLOGIA DE ATUAÇÃO</span>
+      </div>
+      <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white tracking-tight">
+        Como Conduzo Cada Projeto do Início ao Fim
+      </h2>
+      <p class="text-slate-400 text-base max-w-2xl mt-4">
+        Processo claro, iterativo e previsível, desenhado para eliminar incertezas e garantir entrega no prazo com máxima qualidade técnica.
+      </p>
+    </div>
+
+    <!-- 4 Steps Flow Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {portfolioData.processSteps.map((step) => (
+        <div
+          class="glass-panel relative rounded-3xl p-6 flex flex-col justify-between hover:-translate-y-1.5 transition-all group overflow-hidden"
+        >
+          <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="w-10 h-10 rounded-2xl bg-white/5 border border-white/15 text-white font-heading font-bold text-sm flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.06)]">
+                {step.step}
+              </span>
+              <span class="text-[11px] font-mono text-slate-500 uppercase tracking-wider">
+                Fase {step.step}
+              </span>
+            </div>
+
+            <h3 class="font-heading font-bold text-lg text-white group-hover:text-slate-200 transition-colors mb-2.5">
+              {step.title}
+            </h3>
+
+            <p class="text-slate-300 text-xs leading-relaxed mb-4 text-justify">
+              {step.description}
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-white/10">
+            <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1">
+              Entregável da Fase:
+            </span>
+            <span class="text-xs font-medium text-slate-200 block">
+              {step.deliverable}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

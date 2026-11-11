@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+import { portfolioData } from '../data/portfolioData';
+import BinaryBackground from '../components/BinaryBackground.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = `${portfolioData.personal.displayName} — Ciência da Computação & Engenharia de Software`,
+  description = portfolioData.personal.bioShort
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-black text-slate-100 antialiased selection:bg-slate-700 selection:text-white relative min-h-screen">
+    <!-- Fundo de alta precisão Apple Dark: spotlight prateado sutil + grid dark milimétrico -->
+    <div class="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
+      <!-- Glow prateado no topo (atrás do Hero) -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[480px] bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.06)_0%,transparent_70%)] blur-2xl"></div>
+      
+      <!-- Grid sutil de precisão -->
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
+      
+      <!-- Vinheta radial para foco central -->
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_35%,#000000_100%)]"></div>
+    </div>
+
+    <!-- Fluxo de números binários prateados -->
+    <BinaryBackground />
+
+    <!-- Conteúdo -->
+    <div class="relative z-10 flex flex-col min-h-screen">
+      <slot />
+    </div>
+
+    <script>
+      // Spotlight: posiciona o brilho dos cards conforme o cursor
+      let raf = 0;
+      document.addEventListener('pointermove', (e) => {
+        const target = (e.target as HTMLElement | null)?.closest<HTMLElement>('.glass-panel');
+        if (!target) return;
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const r = target.getBoundingClientRect();
+          target.style.setProperty('--mx', `${e.clientX - r.left}px`);
+          target.style.setProperty('--my', `${e.clientY - r.top}px`);
+        });
+      }, { passive: true });
+
+      // Revelação progressiva dos cards ao rolar
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target as HTMLElement;
+            io.unobserve(el);
+            el.classList.remove('reveal-pending');
+            el.classList.add('reveal-in');
+            el.addEventListener('animationend', () => el.classList.remove('reveal-in'), { once: true });
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+        document.querySelectorAll<HTMLElement>('main section:not(#home) .glass-panel').forEach((el) => {
+          const siblings = Array.from(el.parentElement?.children ?? []);
+          el.style.animationDelay = `${Math.max(0, siblings.indexOf(el)) * 90}ms`;
+          el.classList.add('reveal-pending');
+          io.observe(el);
+        });
+      }
+    </script>
+  </body>
+</html>

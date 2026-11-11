@@ -1,0 +1,176 @@
+---
+import { portfolioData } from '../data/portfolioData';
+---
+
+<section id="about" class="py-20 sm:py-28 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="flex flex-col items-center text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 text-xs font-mono font-medium mb-3">
+        <span>// SOBRE MIM</span>
+      </div>
+      <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white tracking-tight max-w-2xl">
+        Engenharia de Software com Rigor, Confiabilidade e Impacto Real
+      </h2>
+      <p class="text-slate-400 text-base max-w-2xl mt-4">
+        Conheça a trajetória que une a precisão e a disciplina militar à inovação da computação moderna e arquiteturas corporativas.
+      </p>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column: Profile Card -->
+      <div class="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative overflow-hidden">
+        
+        <!-- Profile Avatar with Apple Silver Halo & Real Photo -->
+        <div class="relative w-40 h-40 sm:w-48 sm:h-48 mb-6 group">
+          <div class="absolute -inset-1.5 rounded-full bg-gradient-to-tr from-slate-500 via-white to-slate-400 opacity-35 group-hover:opacity-70 blur-md transition-opacity"></div>
+          <div class="relative w-full h-full rounded-full bg-[#0a0a0d] border-2 border-white/20 p-1 flex items-center justify-center overflow-hidden shadow-2xl">
+            <img
+              src="/helton.jpg"
+              alt="Helton Junior"
+              class="w-full h-full object-cover object-top rounded-full"
+              loading="eager"
+            />
+          </div>
+          <span class="absolute bottom-1 right-2 px-2 py-0.5 rounded-full bg-black/80 border border-white/20 text-[10px] font-mono text-emerald-400 flex items-center gap-1 shadow-lg">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            DEV // EB
+          </span>
+        </div>
+
+        <h3 class="font-heading font-bold text-xl sm:text-2xl text-white">
+          {portfolioData.personal.fullName}
+        </h3>
+        <p class="text-slate-300 text-sm font-medium mt-1">
+          {portfolioData.personal.title}
+        </p>
+        <p class="text-slate-400 text-xs font-mono mt-2 flex items-center justify-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span>{portfolioData.personal.location}</span>
+        </p>
+
+        <!-- Quick Badges -->
+        <div class="flex flex-wrap justify-center gap-2 mt-5">
+          <span class="px-3 py-1 rounded-full bg-white/5 text-slate-200 border border-white/10 text-xs font-mono">
+            Exército Brasileiro
+          </span>
+          <span class="px-3 py-1 rounded-full bg-white/5 text-slate-200 border border-white/10 text-xs font-mono">
+            Ciência da Computação
+          </span>
+          <span class="px-3 py-1 rounded-full bg-white/5 text-slate-200 border border-white/10 text-xs font-mono">
+            Automação IA
+          </span>
+        </div>
+
+        <!-- Social Buttons -->
+        <div class="flex items-center gap-3 mt-6 pt-6 border-t border-white/10 w-full justify-center">
+          <a
+            href={portfolioData.personal.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-200 hover:text-white text-xs font-semibold flex items-center gap-2 border border-white/10 transition-all"
+          >
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+          <a
+            href={portfolioData.personal.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-200 hover:text-white text-xs font-semibold flex items-center gap-2 border border-white/10 transition-all"
+          >
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <span>GitHub</span>
+          </a>
+          <a
+            href={portfolioData.personal.whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-xl bg-white hover:bg-slate-200 text-black text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
+          >
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Bio & Core Pillars -->
+      <div class="lg:col-span-7 flex flex-col gap-6">
+        
+        <!-- Bio Card -->
+        <div class="glass-panel rounded-3xl p-6 sm:p-8">
+          <h3 class="font-heading font-semibold text-lg text-white mb-3 flex items-center gap-2">
+            <span class="text-slate-400 font-mono">01.</span> Resumo Profissional
+          </h3>
+          <p class="text-slate-300 text-base leading-relaxed text-justify">
+            {portfolioData.personal.bioFull}
+          </p>
+        </div>
+
+        <!-- 3 Core Pillars Cards with Professional SVG Icons & Silver Borders -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          
+          <div class="glass-panel relative rounded-2xl p-5 border border-white/10 hover:border-white/30 hover:-translate-y-1 transition-all overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+            <div class="w-11 h-11 rounded-xl bg-white/5 border border-white/15 text-white flex items-center justify-center mb-3 shadow-[0_0_12px_rgba(255,255,255,0.06)]">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/>
+                <rect x="9" y="9" width="6" height="6" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-width="2" d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/>
+              </svg>
+            </div>
+            <h4 class="font-heading font-semibold text-white text-sm mb-1.5">
+              Sistemas &amp; SaaS
+            </h4>
+            <p class="text-slate-300 text-xs leading-relaxed">
+              Desenvolvimento de arquiteturas SaaS multi-tenant, backends robustos em Laravel/Python e frontends modernos em React/TypeScript.
+            </p>
+          </div>
+
+          <div class="glass-panel relative rounded-2xl p-5 border border-white/10 hover:border-white/30 hover:-translate-y-1 transition-all overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+            <div class="w-11 h-11 rounded-xl bg-white/5 border border-white/15 text-white flex items-center justify-center mb-3 shadow-[0_0_12px_rgba(255,255,255,0.06)]">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h4 class="font-heading font-semibold text-white text-sm mb-1.5">
+              Automação &amp; IA
+            </h4>
+            <p class="text-slate-300 text-xs leading-relaxed">
+              Agentes inteligentes, bots conectados a WhatsApp, conciliação financeira automatizada e pipelines de dados sem intervenção manual.
+            </p>
+          </div>
+
+          <div class="glass-panel relative rounded-2xl p-5 border border-white/10 hover:border-white/30 hover:-translate-y-1 transition-all overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+            <div class="w-11 h-11 rounded-xl bg-white/5 border border-white/15 text-white flex items-center justify-center mb-3 shadow-[0_0_12px_rgba(255,255,255,0.06)]">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <h4 class="font-heading font-semibold text-white text-sm mb-1.5">
+              Infraestrutura &amp; Redes
+            </h4>
+            <p class="text-slate-300 text-xs leading-relaxed">
+              Administração de servidores Linux corporativos, segurança de rede local, políticas de acesso e diagnóstico elétrico de hardware.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,41 @@
+{
+  "name": "portfolio-helton",
+  "version": "1.0.0",
+  "description": "Portfólio Profissional de Francisco Helton — Ciência da Computação, Desenvolvimento de Software e Automação",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "keywords": [
+    "portfolio",
+    "computer-science",
+    "software-engineer",
+    "ai-automation"
+  ],
+  "author": "Francisco Helton",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@astrojs/react": "7.1.5",
+    "@astrojs/tailwind": "6.0.2",
+    "@tailwindcss/vite": "4.3.5",
+    "@types/canvas-confetti": "1.9.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "astro": "7.4.8",
+    "canvas-confetti": "1.9.4",
+    "lucide-react": "1.71.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwindcss": "4.3.5",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "typescript": "6.0.3"
+  }
+}

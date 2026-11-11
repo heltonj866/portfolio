@@ -1,0 +1,177 @@
+---
+import { portfolioData } from '../data/portfolioData';
+
+const links = [
+  { id: 'home', label: 'Início' },
+  { id: 'about', label: 'Sobre' },
+  { id: 'services', label: 'Serviços' },
+  { id: 'experience', label: 'Trajetória' },
+  { id: 'portfolio', label: 'Portfólio' },
+  { id: 'contact', label: 'Contato' }
+];
+---
+
+<header id="site-header" class="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl px-3 sm:px-4 pointer-events-none">
+  <!-- Moldura Apple Glassmorphism com Borda Prateada Escovada -->
+  <div class="hdr-shell pointer-events-auto rounded-full p-[1px] bg-gradient-to-r from-white/15 via-white/30 to-white/10 shadow-[0_12px_40px_-10px_rgba(0,0,0,0.9),0_0_24px_rgba(255,255,255,0.05)] transition-all duration-300">
+    <div class="hdr-inner relative rounded-full bg-black/80 backdrop-blur-2xl px-3 sm:px-5 py-2 flex items-center justify-between gap-3 overflow-hidden transition-all duration-300">
+
+      <!-- Brilho interno prateado de topo -->
+      <div class="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
+
+      <!-- Marca -->
+      <a href="#home" class="flex items-center gap-2.5 group shrink-0" aria-label="Início">
+        <span class="relative">
+          <span class="absolute -inset-1 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 blur-md transition-opacity"></span>
+          <span class="relative w-9 h-9 rounded-full bg-gradient-to-tr from-zinc-800 to-zinc-600 border border-white/25 flex items-center justify-center font-heading font-bold text-sm text-white group-hover:scale-105 transition-transform">
+            HJ
+          </span>
+          <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-black">
+            <span class="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70"></span>
+          </span>
+        </span>
+        <span class="hidden sm:flex flex-col leading-tight">
+          <span class="font-heading font-bold text-sm text-white group-hover:text-slate-200 transition-colors">Helton Junior</span>
+          <span class="font-mono text-[10px] text-slate-400 tracking-wide">Software • IA • Infraestrutura</span>
+        </span>
+      </a>
+
+      <!-- Navegação desktop com indicador deslizante -->
+      <nav id="main-nav" class="hidden md:flex items-center relative text-sm font-medium" aria-label="Principal">
+        <span id="nav-indicator" class="absolute top-0 bottom-0 rounded-full bg-white/10 border border-white/20 shadow-[0_0_12px_rgba(255,255,255,0.1)] opacity-0 transition-all duration-300 ease-out pointer-events-none"></span>
+        {links.map((l) => (
+          <a href={`#${l.id}`} data-section={l.id} class="nav-link relative z-10 px-3.5 py-1.5 rounded-full text-slate-300 hover:text-white text-xs sm:text-sm transition-colors">
+            {l.label}
+          </a>
+        ))}
+      </nav>
+
+      <!-- Ações -->
+      <div class="hidden md:flex items-center gap-2 shrink-0">
+        <span class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 text-[11px] font-mono">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Disponível
+        </span>
+
+        <a href={portfolioData.personal.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+           class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-300 hover:text-white hover:-translate-y-0.5 transition-all">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        </a>
+
+        <a href={portfolioData.personal.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+           class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-300 hover:text-white hover:-translate-y-0.5 transition-all">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        </a>
+
+        <a href={portfolioData.personal.whatsappLink} target="_blank" rel="noopener noreferrer"
+           class="relative overflow-hidden flex items-center gap-1.5 pl-4 pr-3.5 py-2 rounded-full bg-white hover:bg-slate-200 text-black text-xs font-semibold shadow-[0_0_20px_rgba(255,255,255,0.18)] hover:scale-105 active:scale-95 transition-all">
+          <span class="relative z-10">WhatsApp</span>
+          <svg class="relative z-10 w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+
+      <!-- Botão mobile -->
+      <button id="mobile-menu-btn" type="button" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobile-dropdown"
+        class="md:hidden w-10 h-10 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-slate-100 hover:bg-white/10 transition-colors">
+        <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Progresso de rolagem prateado -->
+      <div class="pointer-events-none absolute left-6 right-6 bottom-0 h-[2px] rounded-full bg-white/5">
+        <div id="scroll-progress" class="h-full w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-slate-400 via-white to-slate-300 shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu mobile -->
+  <div id="mobile-dropdown" class="md:hidden hidden mt-2 glass-panel rounded-3xl p-4 pointer-events-auto animate-fadeUp">
+    <nav class="flex flex-col gap-1.5" aria-label="Menu mobile">
+      {links.map((l) => (
+        <a href={`#${l.id}`} class="mobile-nav-link px-4 py-3 rounded-2xl text-slate-200 hover:text-white hover:bg-white/10 font-medium text-sm transition-colors">
+          {l.label}
+        </a>
+      ))}
+      <div class="pt-3 mt-1 border-t border-white/10 flex flex-col gap-3">
+        <a href={portfolioData.personal.whatsappLink} target="_blank" rel="noopener noreferrer"
+           class="w-full text-center py-3 rounded-2xl bg-white text-black font-semibold text-sm shadow-lg shadow-white/10">
+          Conversar no WhatsApp
+        </a>
+        <div class="flex items-center justify-center gap-5 text-slate-400 text-xs">
+          <a href={portfolioData.personal.linkedin} target="_blank" rel="noopener noreferrer" class="hover:text-white">LinkedIn</a>
+          <a href={portfolioData.personal.github} target="_blank" rel="noopener noreferrer" class="hover:text-white">GitHub</a>
+          <a href={`mailto:${portfolioData.personal.email}`} class="hover:text-white">E-mail</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style is:global>
+  #site-header.is-scrolled .hdr-inner { padding-top: 0.35rem; padding-bottom: 0.35rem; background: rgba(0, 0, 0, 0.92); }
+  #site-header.is-scrolled .hdr-shell { box-shadow: 0 14px 45px -10px rgba(0, 0, 0, 0.95), 0 0 28px rgba(255, 255, 255, 0.08); }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const dropdown = document.getElementById('mobile-dropdown');
+  const hamburgerIcon = document.getElementById('hamburger-icon');
+  const closeIcon = document.getElementById('close-icon');
+  const nav = document.getElementById('main-nav');
+  const indicator = document.getElementById('nav-indicator');
+  const progress = document.getElementById('scroll-progress');
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.nav-link'));
+
+  function toggleMenu() {
+    const expanded = menuBtn?.getAttribute('aria-expanded') === 'true';
+    menuBtn?.setAttribute('aria-expanded', String(!expanded));
+    dropdown?.classList.toggle('hidden');
+    hamburgerIcon?.classList.toggle('hidden');
+    closeIcon?.classList.toggle('hidden');
+  }
+  menuBtn?.addEventListener('click', toggleMenu);
+  document.querySelectorAll('.mobile-nav-link').forEach((a) =>
+    a.addEventListener('click', () => { if (!dropdown?.classList.contains('hidden')) toggleMenu(); })
+  );
+
+  // Indicador deslizante
+  let activeId = 'home';
+  function moveTo(link: HTMLElement | null) {
+    if (!link || !indicator) return;
+    indicator.style.left = `${link.offsetLeft}px`;
+    indicator.style.width = `${link.offsetWidth}px`;
+    indicator.style.opacity = '1';
+  }
+  function setActive(id: string) {
+    activeId = id;
+    navLinks.forEach((l) => {
+      const on = l.dataset.section === id;
+      l.classList.toggle('text-white', on);
+      l.classList.toggle('text-slate-300', !on);
+    });
+    moveTo(navLinks.find((l) => l.dataset.section === id) ?? null);
+  }
+  navLinks.forEach((l) => l.addEventListener('mouseenter', () => moveTo(l)));
+  nav?.addEventListener('mouseleave', () => setActive(activeId));
+  window.addEventListener('resize', () => setActive(activeId));
+  document.fonts?.ready.then(() => setActive(activeId));
+  setActive('home');
+
+  // ScrollSpy
+  const sections = document.querySelectorAll('section[id]');
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+  sections.forEach((s) => spy.observe(s));
+
+  // Progresso de rolagem + estado compacto
+  function onScroll() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    if (progress) progress.style.transform = `scaleX(${p})`;
+    header?.classList.toggle('is-scrolled', window.scrollY > 24);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
