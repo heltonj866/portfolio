@@ -21,73 +21,116 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
   });
 }
 
-// Microchip EMV metálico hiper-realista com contatos segmentados
-function drawEmvChip(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+// Fundo oceânico com ondas profundas (estilo exato do backdrop da foto na referência)
+function drawOceanBackdrop(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
   ctx.save();
-  // Base metálica dourada/platina com brilho
-  const grad = ctx.createLinearGradient(x, y, x + w, y + h);
-  grad.addColorStop(0, '#fef08a');
-  grad.addColorStop(0.25, '#ca8a04');
-  grad.addColorStop(0.5, '#fef9c3');
-  grad.addColorStop(0.75, '#a16207');
-  grad.addColorStop(1, '#eab308');
-
-  ctx.fillStyle = grad;
   ctx.beginPath();
-  ctx.roundRect(x, y, w, h, 10);
-  ctx.fill();
+  ctx.rect(x, y, w, h);
+  ctx.clip();
 
-  ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-  ctx.lineWidth = 2.5;
+  // Gradiente base azul oceano profundo
+  const oceanBg = ctx.createLinearGradient(x, y, x, y + h);
+  oceanBg.addColorStop(0, '#0a1d37');
+  oceanBg.addColorStop(0.4, '#0f294a');
+  oceanBg.addColorStop(0.8, '#08172c');
+  oceanBg.addColorStop(1, '#030a14');
+  ctx.fillStyle = oceanBg;
+  ctx.fillRect(x, y, w, h);
+
+  // Camadas de ondulação e mar revolto
+  const waveLayers = [
+    { freq: 0.02, amp: 14, speed: 1.0, color: 'rgba(14, 116, 144, 0.45)' },
+    { freq: 0.035, amp: 10, speed: 1.8, color: 'rgba(30, 58, 138, 0.6)' },
+    { freq: 0.05, amp: 8, speed: 2.5, color: 'rgba(56, 189, 248, 0.25)' },
+    { freq: 0.08, amp: 5, speed: 3.2, color: 'rgba(255, 255, 255, 0.15)' }
+  ];
+
+  for (let row = y + 10; row < y + h; row += 22) {
+    waveLayers.forEach((wl, idx) => {
+      ctx.beginPath();
+      ctx.strokeStyle = wl.color;
+      ctx.lineWidth = 3 + (idx % 2) * 2;
+      for (let px = x; px <= x + w; px += 8) {
+        const offset = Math.sin((px + row * 2) * wl.freq) * wl.amp + Math.cos(px * 0.015) * 6;
+        const py = row + offset;
+        if (px === x) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    });
+  }
+
+  // Respingo de espuma e textura marinha
+  let s = 12345;
+  const rnd = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+  for (let i = 0; i < 180; i++) {
+    const fx = x + rnd() * w;
+    const fy = y + rnd() * h;
+    const fr = rnd() * 2 + 0.5;
+    ctx.beginPath();
+    ctx.arc(fx, fy, fr, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+// Elo de corrente cromada metálica 3D nos cantos (idêntico à referência)
+function drawChromeLink(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, angle: number) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(angle);
+
+  // Sombra profunda sob a corrente
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+  ctx.shadowBlur = 18;
+  ctx.shadowOffsetX = 8;
+  ctx.shadowOffsetY = 12;
+
+  // Corpo metálico cromado em degradê
+  const grad = ctx.createLinearGradient(-r, -r, r, r);
+  grad.addColorStop(0, '#ffffff');
+  grad.addColorStop(0.2, '#94a3b8');
+  grad.addColorStop(0.4, '#1e293b');
+  grad.addColorStop(0.6, '#cbd5e1');
+  grad.addColorStop(0.85, '#475569');
+  grad.addColorStop(1, '#0f172a');
+
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 18;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r, r * 0.55, 0, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Canais de contato do microchip
-  ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
-  ctx.lineWidth = 2;
-
-  // Linha horizontal central
+  // Reset shadow para o brilho especular interno
+  ctx.shadowColor = 'transparent';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.lineWidth = 3.5;
   ctx.beginPath();
-  ctx.moveTo(x, y + h * 0.5);
-  ctx.lineTo(x + w * 0.32, y + h * 0.5);
-  ctx.moveTo(x + w * 0.68, y + h * 0.5);
-  ctx.lineTo(x + w, y + h * 0.5);
-  ctx.stroke();
-
-  // Linhas verticais
-  ctx.beginPath();
-  ctx.moveTo(x + w * 0.32, y);
-  ctx.lineTo(x + w * 0.32, y + h);
-  ctx.moveTo(x + w * 0.68, y);
-  ctx.lineTo(x + w * 0.68, y + h);
-  ctx.stroke();
-
-  // Ilha central do chip
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
-  ctx.beginPath();
-  ctx.roundRect(x + w * 0.35, y + h * 0.28, w * 0.3, h * 0.44, 4);
-  ctx.fill();
+  ctx.ellipse(0, 0, r - 5, (r - 5) * 0.55, 0, 0, Math.PI * 2);
   ctx.stroke();
 
   ctx.restore();
 }
 
-// Barcode industrial de alta densidade
-function drawBarcode(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+// Código de barras industrial de alta resolução
+function drawBarcode(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, lightMode = false) {
   ctx.save();
   let cx = x;
-  let s = 8392014;
+  let s = 9876543;
   const rnd = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
   while (cx < x + w - 10) {
     const barW = Math.floor(rnd() * 3 + 1) * 2;
     const gapW = Math.floor(rnd() * 2 + 1) * 2;
-    ctx.fillStyle = rnd() > 0.12 ? '#090d16' : '#64748b';
+    ctx.fillStyle = rnd() > 0.14 ? (lightMode ? '#090d16' : '#f8fafc') : (lightMode ? '#94a3b8' : '#475569');
     ctx.fillRect(cx, y, barW, h);
     cx += barW + gapW;
   }
   ctx.restore();
 }
 
-// QR Code central nítido com cantos arredondados
+// QR Code central nítido
 function drawQr(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, seed: number) {
   const n = 21;
   const cell = size / n;
@@ -96,7 +139,7 @@ function drawQr(ctx: CanvasRenderingContext2D, x: number, y: number, size: numbe
   ctx.roundRect(x - 16, y - 16, size + 32, size + 32, 16);
   ctx.fill();
   ctx.strokeStyle = '#090d16';
-  ctx.lineWidth = 3.5;
+  ctx.lineWidth = 4;
   ctx.stroke();
 
   ctx.fillStyle = '#090d16';
@@ -121,374 +164,372 @@ function drawQr(ctx: CanvasRenderingContext2D, x: number, y: number, size: numbe
   finder(0, n - 7);
 }
 
-// Selo holográfico geométrico de autenticação
-function drawSecuritySeal(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
-  ctx.save();
-  ctx.translate(cx, cy);
-
-  // Borda metálica
-  const grad = ctx.createRadialGradient(0, 0, r * 0.2, 0, 0, r);
-  grad.addColorStop(0, '#ffffff');
-  grad.addColorStop(0.5, '#cbd5e1');
-  grad.addColorStop(1, '#090d16');
-
-  ctx.strokeStyle = grad;
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.arc(0, 0, r, 0, Math.PI * 2);
-  ctx.stroke();
-
-  // Linhas radiais de difração
-  ctx.strokeStyle = 'rgba(9, 13, 22, 0.25)';
-  ctx.lineWidth = 1.2;
-  for (let a = 0; a < Math.PI * 2; a += Math.PI / 8) {
-    ctx.beginPath();
-    ctx.moveTo(Math.cos(a) * (r * 0.35), Math.sin(a) * (r * 0.35));
-    ctx.lineTo(Math.cos(a) * (r * 0.88), Math.sin(a) * (r * 0.88));
-    ctx.stroke();
-  }
-
-  // Losango central em ônix
-  ctx.fillStyle = '#090d16';
-  ctx.beginPath();
-  ctx.moveTo(0, -r * 0.45);
-  ctx.lineTo(r * 0.45, 0);
-  ctx.lineTo(0, r * 0.45);
-  ctx.lineTo(-r * 0.45, 0);
-  ctx.closePath();
-  ctx.fill();
-
-  // Monograma HJ centralizado
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '800 18px "Space Grotesk", sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('HJ', 0, 1);
-
-  ctx.restore();
-}
-
-// -------------------------------------------------------------
-// FACE FRONTAL — CRACHÁ FLAGSHIP / CARTÃO POSTAL DE ALTA DEFINIÇÃO
-// -------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+// FACE FRONTAL — OPÇÃO A: OBSIDIAN DARK POSTER (COM CAMADAS GRÁFICAS DA REFERÊNCIA)
+// --------------------------------------------------------------------------------------
 function buildFront(photoImg: HTMLImageElement | null): string {
   const [c, ctx] = makeCanvas();
 
-  // 1. CARCAÇA EXTERNA (CASING / BUMPER): Preto Ônix Acetinado com chanfros
-  ctx.fillStyle = '#080a10';
+  // 1. FUNDO DO CARTÃO: Grafite Profundo / Azul Petróleo Escuro com textura de papel
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#111622');
+  bg.addColorStop(0.4, '#0c101a');
+  bg.addColorStop(0.85, '#07090e');
+  bg.addColorStop(1, '#040508');
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  // Textura sutil de micro-pontos na moldura externa
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-  for (let x = 16; x < W - 16; x += 28) {
-    for (let y = 16; y < H - 16; y += 28) {
+  // Textura sutil de fibra/grade técnica
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.025)';
+  for (let x = 0; x < W; x += 36) {
+    for (let y = 0; y < H; y += 36) {
       ctx.fillRect(x, y, 1.5, 1.5);
     }
   }
 
-  // 2. CORPO DO CARTÃO INTERNO (INSERT): Titânio / Off-white acetinado de alto contraste
-  const padX = 40;
-  const padY = 138;
-  const cardW = W - padX * 2;
-  const cardH = H - padY - 36;
-  const cardRadius = 22;
-
-  // Sombra e relevo da moldura
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  ctx.beginPath();
-  ctx.roundRect(padX - 4, padY - 4, cardW + 8, cardH + 8, cardRadius + 4);
-  ctx.fill();
-
-  // Fundo principal do cartão com gradiente titânio acetinado
-  const bg = ctx.createLinearGradient(padX, padY, padX + cardW, padY + cardH);
-  bg.addColorStop(0, '#ffffff');
-  bg.addColorStop(0.35, '#f8fafc');
-  bg.addColorStop(0.7, '#f1f5f9');
-  bg.addColorStop(1, '#e2e8f0');
-  ctx.fillStyle = bg;
-  ctx.beginPath();
-  ctx.roundRect(padX, padY, cardW, cardH, cardRadius);
-  ctx.fill();
-
-  // Borda metálica fina do cartão interno
-  ctx.strokeStyle = 'rgba(15, 23, 42, 0.35)';
-  ctx.lineWidth = 2.5;
-  ctx.stroke();
-
-  // Micro-grade técnica pontilhada sobre o cartão interno
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.04)';
-  for (let x = padX + 24; x < padX + cardW - 24; x += 32) {
-    for (let y = padY + 24; y < padY + cardH - 24; y += 32) {
-      ctx.fillRect(x, y, 1.5, 1.5);
-    }
-  }
-
-  // Miras/Crosshairs nos 4 cantos do cartão interno
-  const drawCornerCross = (x: number, y: number) => {
-    ctx.strokeStyle = '#090d16';
-    ctx.lineWidth = 2;
+  // Linhas diagonais de segurança
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+  ctx.lineWidth = 1;
+  for (let d = -H; d < W + H; d += 60) {
     ctx.beginPath();
-    ctx.moveTo(x - 12, y);
-    ctx.lineTo(x + 12, y);
-    ctx.moveTo(x, y - 12);
-    ctx.lineTo(x, y + 12);
+    ctx.moveTo(d, 0);
+    ctx.lineTo(d + H, H);
+    ctx.stroke();
+  }
+
+  // Borda perimetral técnica com margem interna de segurança
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+  ctx.lineWidth = 2.5;
+  ctx.strokeRect(36, 36, W - 72, H - 72);
+
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(46, 46, W - 92, H - 92);
+
+  // Miras/Crosshairs nos 4 cantos
+  const drawCornerCross = (x: number, y: number) => {
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(x - 12, y); ctx.lineTo(x + 12, y);
+    ctx.moveTo(x, y - 12); ctx.lineTo(x, y + 12);
     ctx.stroke();
   };
-  drawCornerCross(padX + 28, padY + 28);
-  drawCornerCross(padX + cardW - 28, padY + 28);
-  drawCornerCross(padX + 28, padY + cardH - 28);
-  drawCornerCross(padX + cardW - 28, padY + cardH - 28);
+  drawCornerCross(54, 54);
+  drawCornerCross(W - 54, 54);
+  drawCornerCross(54, H - 54);
+  drawCornerCross(W - 54, H - 54);
 
-  // 3. HEADER SUPERIOR DO CARTÃO (y: 165 - 235)
-  // Chip de identificação esquerdo
-  ctx.fillStyle = '#090d16';
+  // 2. HEADER SUPERIOR TÉCNICO
+  // Pílula esquerda: "JUNIOR" ou "SOFTWARE"
+  ctx.fillStyle = '#ffffff';
   ctx.beginPath();
-  ctx.roundRect(padX + 28, padY + 24, 210, 44, 8);
+  ctx.roundRect(64, 110, 160, 44, 8);
   ctx.fill();
 
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '800 17px "JetBrains Mono", monospace';
+  ctx.fillStyle = '#090d16';
+  ctx.font = '900 20px "JetBrains Mono", monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('ENGINEER // ID', padX + 28 + 105, padY + 24 + 22);
+  ctx.fillText('JUNIOR', 144, 132);
 
-  // Instituição à direita
+  // Instituição à direita: "UNINOVAFAPI" e "EXÉRCITO BRASILEIRO"
   ctx.textAlign = 'right';
-  ctx.fillStyle = '#090d16';
-  ctx.font = '800 20px "Space Grotesk", sans-serif';
-  ctx.fillText('UNINOVAFAPI', padX + cardW - 28, padY + 36);
-  ctx.fillStyle = '#64748b';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 22px "Space Grotesk", sans-serif';
+  ctx.fillText('UNINOVAFAPI', W - 64, 130);
+  ctx.fillStyle = '#94a3b8';
   ctx.font = '700 13px "JetBrains Mono", monospace';
-  ctx.fillText('EXÉRCITO BRASILEIRO • 2026', padX + cardW - 28, padY + 58);
+  ctx.fillText('EXÉRCITO BRASILEIRO • 2026', W - 64, 154);
 
-  // Linha técnica sob o header
-  ctx.strokeStyle = 'rgba(15, 23, 42, 0.15)';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(padX + 28, padY + 84);
-  ctx.lineTo(padX + cardW - 28, padY + 84);
-  ctx.stroke();
+  // 3. TIPOGRAFIA HERO MONUMENTAL: "DEVELOPER"
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 120px "Space Grotesk", sans-serif';
+  ctx.letterSpacing = '-0.04em';
+  ctx.fillText('DEVELOPER', W / 2, 290);
 
-  // 4. MICROCHIP EMV METÁLICO REALISTA
-  drawEmvChip(ctx, padX + 32, padY + 105, 82, 60);
-
-  // Metadados técnicos ao lado do microchip
-  ctx.textAlign = 'left';
+  // Selo diagonal "ORIGINAL" sobre a letra E de DEVELOPER (detalhe autêntico da referência!)
+  ctx.save();
+  ctx.translate(330, 230);
+  ctx.rotate(-0.16);
   ctx.fillStyle = '#090d16';
-  ctx.font = '800 16px "Space Grotesk", sans-serif';
-  ctx.fillText('CONTACTLESS SMART PASS', padX + 128, padY + 126);
-  ctx.fillStyle = '#64748b';
-  ctx.font = '700 12px "JetBrains Mono", monospace';
-  ctx.fillText('SECURITY CHIP // LEVEL 04', padX + 128, padY + 148);
+  ctx.fillRect(-6, -6, 110, 48);
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(-6, -6, 110, 48);
 
-  // 5. FOTO DE HELTON JUNIOR CENTRALIZADA COM ALTA DEFINIÇÃO
-  const pw = 520;
-  const ph = 560;
+  // Listras diagonais zebra
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+  for (let lx = 0; lx < 100; lx += 14) {
+    ctx.fillRect(lx, 18, 6, 20);
+  }
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 16px "Space Grotesk", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('ORIGINAL', 48, 14);
+  ctx.restore();
+
+  // 4. FOTO DE HELTON JUNIOR COM BACKDROP OCEÂNICO PROFUNDO
+  const pw = 480;
+  const ph = 590;
   const px = (W - pw) / 2;
-  const py = padY + 185;
+  const py = 300;
 
   // Moldura escura posterior da foto com cantos técnicos
-  ctx.fillStyle = '#090d16';
-  ctx.beginPath();
-  ctx.roundRect(px - 5, py - 5, pw + 10, ph + 10, 16);
-  ctx.fill();
+  ctx.fillStyle = '#05070c';
+  ctx.fillRect(px - 6, py - 6, pw + 12, ph + 12);
 
-  // Fundo de recorte e desenho da foto de Helton
-  ctx.fillStyle = '#cbd5e1';
-  ctx.beginPath();
-  ctx.roundRect(px, py, pw, ph, 12);
-  ctx.fill();
+  // Fundo oceânico com ondas profundas atrás do Helton
+  drawOceanBackdrop(ctx, px, py, pw, ph);
 
+  // Retrato de Helton Junior sobreposto ao oceano
   if (photoImg) {
     ctx.save();
     ctx.beginPath();
-    ctx.roundRect(px, py, pw, ph, 12);
+    ctx.rect(px, py, pw, ph);
     ctx.clip();
 
-    // Enquadramento fotográfico focado no rosto, sorriso e postura
+    // Sombra de profundidade para o recorte
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+    ctx.shadowBlur = 24;
+
     const srcW = photoImg.width;
     const srcH = Math.min(photoImg.height, photoImg.width * (ph / pw));
     ctx.drawImage(photoImg, 0, 0, srcW, srcH, px, py, pw, ph);
 
-    // Efeito sutil de vinheta na base da foto para contraste com o nametag
-    const photoVignette = ctx.createLinearGradient(0, py + ph - 80, 0, py + ph);
-    photoVignette.addColorStop(0, 'rgba(9, 13, 22, 0)');
-    photoVignette.addColorStop(1, 'rgba(9, 13, 22, 0.35)');
-    ctx.fillStyle = photoVignette;
-    ctx.fillRect(px, py + ph - 80, pw, 80);
-
     ctx.restore();
   }
 
-  // Linhas de foco HUD nos 4 cantos da foto
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  const cLen = 20;
-  // Top-Left
-  ctx.moveTo(px + 12, py + 12 + cLen); ctx.lineTo(px + 12, py + 12); ctx.lineTo(px + 12 + cLen, py + 12);
-  // Top-Right
-  ctx.moveTo(px + pw - 12 - cLen, py + 12); ctx.lineTo(px + pw - 12, py + 12); ctx.lineTo(px + pw - 12, py + 12 + cLen);
-  // Bottom-Left
-  ctx.moveTo(px + 12, py + ph - 12 - cLen); ctx.lineTo(px + 12, py + ph - 12); ctx.lineTo(px + 12 + cLen, py + ph - 12);
-  // Bottom-Right
-  ctx.moveTo(px + pw - 12 - cLen, py + ph - 12); ctx.lineTo(px + pw - 12, py + ph - 12); ctx.lineTo(px + pw - 12, py + ph - 12 - cLen);
-  ctx.stroke();
+  // Linhas de foco HUD na foto
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(px + 10, py + 10, pw - 20, ph - 20);
 
-  // 6. IDENTIFICAÇÃO PRINCIPAL: NOME & ESPECIALIDADE
-  const nameY = py + ph + 54;
+  // 5. NAMETAG FRONTAL NA FOTO (ETIQUETA ADESIVA DE ALTO CONTRASTE)
+  const tagW = 440;
+  const tagH = 64;
+  const tagX = (W - tagW) / 2;
+  const tagY = py + ph - 68;
 
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'alphabetic';
-
-  // Nome Principal com tipografia imponente
-  ctx.fillStyle = '#090d16';
-  ctx.font = '900 58px "Space Grotesk", sans-serif';
-  ctx.letterSpacing = '-0.02em';
-  ctx.fillText('HELTON JUNIOR', W / 2, nameY);
-
-  // Cargo & Especialidade
-  ctx.fillStyle = '#475569';
-  ctx.font = '800 19px "JetBrains Mono", monospace';
-  ctx.letterSpacing = '0.04em';
-  ctx.fillText('SOFTWARE ENGINEER  •  CIÊNCIA DA COMPUTAÇÃO', W / 2, nameY + 36);
-
-  // 7. CÁPSULAS DE COMPETÊNCIAS (PILLS DE ENGENHARIA)
-  const pillsY = nameY + 68;
-  const skills = ['FULL STACK', 'SAAS & AI', 'INFRAESTRUTURA'];
-  const pillW = 220;
-  const pillGap = 16;
-  const startPillX = (W - (skills.length * pillW + (skills.length - 1) * pillGap)) / 2;
-
-  skills.forEach((skill, i) => {
-    const x = startPillX + i * (pillW + pillGap);
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.roundRect(x, pillsY, pillW, 42, 8);
-    ctx.fill();
-
-    ctx.strokeStyle = '#090d16';
-    ctx.lineWidth = 2.5;
-    ctx.stroke();
-
-    ctx.fillStyle = '#090d16';
-    ctx.font = '800 15px "JetBrains Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(skill, x + pillW / 2, pillsY + 21);
-  });
-
-  // Linha divisória técnica
-  const divY = pillsY + 66;
+  // Fundo da etiqueta em branco puro texturizado
+  ctx.fillStyle = '#f8fafc';
+  ctx.fillRect(tagX, tagY, tagW, tagH);
   ctx.strokeStyle = '#090d16';
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  ctx.moveTo(padX + 28, divY);
-  ctx.lineTo(padX + cardW - 28, divY);
-  ctx.stroke();
+  ctx.lineWidth = 4;
+  ctx.strokeRect(tagX, tagY, tagW, tagH);
 
-  // 8. BLOCO INFERIOR DE AUTENTICAÇÃO E CÓDIGO DE BARRAS
-  // Selo geométrico à esquerda
-  drawSecuritySeal(ctx, padX + 76, divY + 65, 42);
+  // Texto do nome
+  ctx.fillStyle = '#090d16';
+  ctx.font = '900 32px "Space Grotesk", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.letterSpacing = '-0.01em';
+  ctx.fillText('HELTON JUNIOR', W / 2, tagY + tagH / 2);
 
-  // Metadados técnicos ao lado do selo
+  // 6. TEXTO VERTICAL ROTACIONADO À DIREITA (IDÊNTICO À REFERÊNCIA)
+  ctx.save();
+  ctx.translate(W - 70, 600);
+  ctx.rotate(Math.PI / 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 46px "Space Grotesk", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.letterSpacing = '-0.02em';
+  ctx.fillText('CIÊNCIA DA COMPUTAÇÃO', 0, 0);
+  ctx.restore();
+
+  // Lateral Esquerda: Coordenadas e identificador
+  ctx.save();
+  ctx.translate(68, 600);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '700 16px "JetBrains Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('05°05\'12"S 42°48\'42"W // TERESINA-PI', 0, 0);
+  ctx.restore();
+
+  // 7. SEÇÃO INFERIOR: "PORTFOLIO" & QUOTE
+  const bottomY = py + ph + 80;
+
+  // "PORTFOLIO" em destaque monumental à esquerda
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#090d16';
-  ctx.font = '800 17px "Space Grotesk", sans-serif';
-  ctx.fillText('CREDENTIAL: HJ-2026-SYS // LEVEL 04', padX + 138, divY + 48);
-  ctx.fillStyle = '#64748b';
-  ctx.font = '700 13px "JetBrains Mono", monospace';
-  ctx.fillText('STACK: REACT • TYPESCRIPT • LARAVEL • POSTGRES • DOCKER', padX + 138, divY + 70);
-  ctx.fillText('LOCATION: TERESINA, PI — 05°05\'12"S 42°48\'42"W', padX + 138, divY + 90);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 70px "Space Grotesk", sans-serif';
+  ctx.letterSpacing = '-0.03em';
+  ctx.fillText('PORTFOLIO', 64, bottomY + 30);
 
-  // Barcode industrial
-  const barY = divY + 115;
-  drawBarcode(ctx, padX + 28, barY, cardW - 56, 52);
+  // Cápsula de lema à direita: "((( Rigor, Precisão & Código )))"
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#cbd5e1';
+  ctx.font = '700 17px "JetBrains Mono", monospace';
+  ctx.fillText('((( Rigor, Precisão & Código )))', W - 64, bottomY);
 
-  // Código alfanumérico sob o barcode
+  // Linha divisória técnica
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(64, bottomY + 54);
+  ctx.lineTo(W - 64, bottomY + 54);
+  ctx.stroke();
+
+  // 8. CÓDIGO DE BARRAS & METADADOS FINAIS
+  const barY = bottomY + 74;
+  drawBarcode(ctx, 64, barY, W - 128, 54, false);
+
+  // Rodapé técnico
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '700 16px "JetBrains Mono", monospace';
+  ctx.fillText('ID: EB-2026-HJ // FULL STACK • AI • INFRASTRUCTURE', 64, barY + 84);
+
+  ctx.textAlign = 'right';
+  ctx.fillText('TERESINA, PI — BRASIL', W - 64, barY + 84);
+
+  // URL LinkedIn centralizada
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#475569';
-  ctx.font = '700 15px "JetBrains Mono", monospace';
-  ctx.fillText('* HJ-994922976-EB-2026-AUTH-SYS *', W / 2, barY + 76);
+  ctx.fillStyle = '#64748b';
+  ctx.font = '600 16px "JetBrains Mono", monospace';
+  ctx.fillText('linkedin.com/in/heltonj866', W / 2, H - 72);
+
+  // 9. ELOS CROMADOS METÁLICOS 3D NOS CANTOS INFERIORES (ESTILO REFERÊNCIA)
+  drawChromeLink(ctx, 84, 1260, 72, -0.42);
+  drawChromeLink(ctx, W - 84, 1260, 72, 0.42);
 
   return c.toDataURL('image/png');
 }
 
-// -------------------------------------------------------------
-// FACE POSTERIOR (VERSO) — NETWORKING & TECH STACK
-// -------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+// FACE POSTERIOR (VERSO) — PÔSTER DE NETWORKING COM SCAN HERE (REFERÊNCIA ALFARI)
+// --------------------------------------------------------------------------------------
 function buildBack(): string {
   const [c, ctx] = makeCanvas();
 
-  // Carcaça Externa Preto Ônix
-  ctx.fillStyle = '#080a10';
+  // Fundo grafite profundo com textura técnica
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#111622');
+  bg.addColorStop(0.4, '#0c101a');
+  bg.addColorStop(0.85, '#07090e');
+  bg.addColorStop(1, '#040508');
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  // Cartão Interno
-  const padX = 40;
-  const padY = 138;
-  const cardW = W - padX * 2;
-  const cardH = H - padY - 36;
-  const cardRadius = 22;
-
-  // Fundo principal do cartão com gradiente titânio acetinado
-  const bg = ctx.createLinearGradient(padX, padY, padX + cardW, padY + cardH);
-  bg.addColorStop(0, '#ffffff');
-  bg.addColorStop(0.35, '#f8fafc');
-  bg.addColorStop(0.7, '#f1f5f9');
-  bg.addColorStop(1, '#e2e8f0');
-  ctx.fillStyle = bg;
-  ctx.beginPath();
-  ctx.roundRect(padX, padY, cardW, cardH, cardRadius);
-  ctx.fill();
-
-  ctx.strokeStyle = 'rgba(15, 23, 42, 0.35)';
+  // Borda perimetral técnica
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
   ctx.lineWidth = 2.5;
-  ctx.stroke();
+  ctx.strokeRect(36, 36, W - 72, H - 72);
 
-  // Tarja magnética escura (Magstripe) no topo do verso
+  // Fita adesiva diagonal "SCAN HERE" no topo esquerdo (idêntica à referência!)
+  ctx.save();
+  ctx.translate(140, 100);
+  ctx.rotate(-0.08);
+  ctx.fillStyle = '#f8fafc';
+  ctx.fillRect(-10, -8, 200, 56);
+  ctx.strokeStyle = '#090d16';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(-10, -8, 200, 56);
+
+  // Listras zebra
   ctx.fillStyle = '#090d16';
-  ctx.fillRect(padX + 2, padY + 24, cardW - 4, 78);
+  for (let lx = 0; lx < 190; lx += 18) {
+    ctx.fillRect(lx, 24, 8, 20);
+  }
 
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '800 20px "Space Grotesk", sans-serif';
+  ctx.fillStyle = '#090d16';
+  ctx.font = '900 22px "Space Grotesk", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('IDENTIFICAÇÃO PROFISSIONAL & NETWORKING', W / 2, padY + 63);
+  ctx.fillText('SCAN HERE', 90, 16);
+  ctx.restore();
 
-  // QR Code central nítido
-  const qrSize = 380;
-  const qrX = (W - qrSize) / 2;
-  const qrY = padY + 130;
-  drawQr(ctx, qrX, qrY, qrSize, 8);
-
-  ctx.fillStyle = '#090d16';
-  ctx.font = '800 32px "Space Grotesk", sans-serif';
-  ctx.textAlign = 'center';
+  // Instituição à direita
+  ctx.textAlign = 'right';
   ctx.textBaseline = 'alphabetic';
-  ctx.fillText('Escaneie para Conectar', W / 2, qrY + qrSize + 48);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 22px "Space Grotesk", sans-serif';
+  ctx.fillText('UNINOVAFAPI', W - 64, 120);
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '700 13px "JetBrains Mono", monospace';
+  ctx.fillText('EXÉRCITO BRASILEIRO • 2026', W - 64, 144);
 
-  ctx.fillStyle = '#475569';
-  ctx.font = '700 19px "JetBrains Mono", monospace';
-  ctx.fillText('LinkedIn  •  GitHub  •  WhatsApp', W / 2, qrY + qrSize + 82);
-  ctx.fillText('+55 86 99492-2976 // heltonj866@gmail.com', W / 2, qrY + qrSize + 112);
+  // Bloco central com borda desgastada para o QR Code: "CONNECT OUR NETWORK"
+  const boxW = 540;
+  const boxH = 680;
+  const boxX = (W - boxW) / 2;
+  const boxY = 200;
 
-  // Linha divisória técnica
-  const divY = qrY + qrSize + 148;
-  ctx.strokeStyle = '#090d16';
-  ctx.lineWidth = 2.5;
+  // Fundo azul marinho escuro do container do QR Code
+  ctx.fillStyle = '#0d1527';
+  ctx.fillRect(boxX, boxY, boxW, boxH);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+  // Listras decorativas nos cantos do container
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+  for (let i = 0; i < 6; i++) {
+    ctx.fillRect(boxX + 16, boxY + 80 + i * 24, 16, 12);
+    ctx.fillRect(boxX + boxW - 32, boxY + 80 + i * 24, 16, 12);
+  }
+
+  // Título: "CONNECT OUR NETWORK"
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 32px "Space Grotesk", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('CONNECT OUR NETWORK', W / 2, boxY + 54);
+
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(padX + 28, divY);
-  ctx.lineTo(padX + cardW - 28, divY);
+  ctx.moveTo(boxX + 60, boxY + 70);
+  ctx.lineTo(boxX + boxW - 60, boxY + 70);
   ctx.stroke();
 
-  // Título Tech Stack
-  ctx.fillStyle = '#090d16';
-  ctx.font = '800 22px "JetBrains Mono", monospace';
-  ctx.fillText('// PRINCIPAIS TECNOLOGIAS', W / 2, divY + 44);
+  // QR Code central nítido
+  const qrSize = 360;
+  const qrX = (W - qrSize) / 2;
+  const qrY = boxY + 100;
+  drawQr(ctx, qrX, qrY, qrSize, 8);
 
-  // Chips industriais para Tech Stack
+  // Fita de identificação sob o QR Code: "HELTON JUNIOR • Software Engineer"
+  const subTagY = qrY + qrSize + 40;
+  ctx.fillStyle = '#f8fafc';
+  ctx.fillRect(boxX + 24, subTagY, boxW - 48, 54);
+  ctx.strokeStyle = '#090d16';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(boxX + 24, subTagY, boxW - 48, 54);
+
+  ctx.fillStyle = '#090d16';
+  ctx.font = '900 24px "Space Grotesk", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('HELTON JUNIOR  •  Software Engineer', W / 2, subTagY + 27);
+
+  // Faixa vertical à direita: "TEKNIK / CIÊNCIA DA COMPUTAÇÃO"
+  ctx.save();
+  ctx.translate(W - 70, 540);
+  ctx.rotate(Math.PI / 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 42px "Space Grotesk", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.letterSpacing = '-0.02em';
+  ctx.fillText('CIÊNCIA DA COMPUTAÇÃO', 0, 0);
+  ctx.restore();
+
+  // Seção de Tech Stack no terço inferior
+  const stackY = boxY + boxH + 60;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 22px "JetBrains Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('// CORE TECH STACK', W / 2, stackY);
+
   const tagsRow1 = ['Python', 'TypeScript', 'Laravel'];
   const tagsRow2 = ['React', 'PostgreSQL', 'Docker'];
 
@@ -499,16 +540,16 @@ function buildBack(): string {
 
     tags.forEach((t) => {
       const tw = ctx.measureText(t).width + 56;
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
       ctx.beginPath();
       ctx.roundRect(startX, y - 28, tw, 48, 8);
       ctx.fill();
 
-      ctx.strokeStyle = '#090d16';
-      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = 2;
       ctx.stroke();
 
-      ctx.fillStyle = '#090d16';
+      ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(t, startX + tw / 2, y - 4);
@@ -516,77 +557,66 @@ function buildBack(): string {
     });
   };
 
-  drawRow(tagsRow1, divY + 102);
-  drawRow(tagsRow2, divY + 164);
+  drawRow(tagsRow1, stackY + 54);
+  drawRow(tagsRow2, stackY + 116);
 
-  // Barcode de validação no verso
-  const backBarY = divY + 220;
-  drawBarcode(ctx, padX + 28, backBarY, cardW - 56, 48);
+  // Barcode de validação no rodapé do verso
+  const backBarY = stackY + 170;
+  drawBarcode(ctx, 80, backBarY, W - 160, 48, false);
 
   // Rodapé institucional
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#475569';
+  ctx.fillStyle = '#94a3b8';
   ctx.font = '700 16px "JetBrains Mono", monospace';
-  ctx.fillText('Centro Universitário Uninovafapi // Exército Brasileiro', W / 2, H - 75);
+  ctx.fillText('Centro Universitário Uninovafapi // Exército Brasileiro', W / 2, H - 76);
   ctx.fillStyle = '#64748b';
   ctx.font = '600 14px "JetBrains Mono", monospace';
-  ctx.fillText('Teresina, PI — Brasil  •  ID 2026-HJ', W / 2, H - 52);
+  ctx.fillText('Teresina, PI — Brasil  •  ID 2026-HJ', W / 2, H - 54);
 
   return c.toDataURL('image/png');
 }
 
-// -------------------------------------------------------------
-// CORDÃO (STRAP) — DESIGN TÉCNICO EXECUTIVO DE ALTA DEFINIÇÃO
-// -------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+// CORDÃO (STRAP) — MONOGRAMA CIRCULAR (HJ) + NOME (IDÊNTICO AO FORMATO DA REFERÊNCIA)
+// --------------------------------------------------------------------------------------
 function buildStrap(): string {
-  const along = 2048;
-  const across = 192;
+  // Proporção otimizada para o padrão (F) Alfari Yusuf -> (HJ) Helton Junior
+  const along = 1024;
+  const across = 256;
   const [c, ctx] = makeCanvas(along, across);
 
-  // 1. Trama preta acetinada
-  ctx.fillStyle = '#07080a';
+  // 1. Fundo preto puro profundo
+  ctx.fillStyle = '#000000';
   ctx.fillRect(0, 0, along, across);
 
-  // Textura de tecido trançado
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.035)';
-  for (let x = 0; x < along; x += 3) {
-    ctx.fillRect(x, 0, 1.2, across);
-  }
+  // 2. Monograma circular estilizado "(HJ)"
+  const circleX = 140;
+  const circleY = across / 2;
+  const circleR = 76;
 
-  // 2. Costura branca reforçada nas bordas
+  // Círculo branco com traço grosso
   ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = 3;
-  ctx.setLineDash([14, 8]);
+  ctx.lineWidth = 14;
   ctx.beginPath();
-  ctx.moveTo(0, 14);
-  ctx.lineTo(along, 14);
-  ctx.moveTo(0, across - 14);
-  ctx.lineTo(along, across - 14);
+  ctx.arc(circleX, circleY, circleR, 0, Math.PI * 2);
   ctx.stroke();
 
-  // 3. Tipografia de Alto Impacto em repetição elegante
-  const phrase = 'HELTON JUNIOR  ✦  SOFTWARE ENGINEER  ✦  CIÊNCIA DA COMPUTAÇÃO  ✦  HJ.DEV  ✦  ';
-
-  ctx.setLineDash([]);
-  ctx.font = '900 48px "Space Grotesk", sans-serif';
+  // Letra HJ em destaque no centro do círculo
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 82px "Space Grotesk", sans-serif';
+  ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
+  ctx.letterSpacing = '-0.04em';
+  ctx.fillText('HJ', circleX, circleY + 2);
+
+  // 3. Nome "Helton Junior" em tipografia bold marcante
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 106px "Space Grotesk", sans-serif';
   ctx.textAlign = 'left';
-
-  const textWidth = ctx.measureText(phrase).width;
-  const repeats = Math.ceil(along / textWidth) + 1;
-
-  for (let r = 0; r < repeats; r++) {
-    const x = r * textWidth;
-
-    // Sombra para contraste
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.fillText(phrase, x + 2, across / 2 + 2);
-
-    // Texto em branco puro de alta nitidez
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(phrase, x, across / 2);
-  }
+  ctx.textBaseline = 'middle';
+  ctx.letterSpacing = '-0.02em';
+  ctx.fillText('Helton Junior', circleX + circleR + 56, across / 2);
 
   return c.toDataURL('image/png');
 }
@@ -601,18 +631,19 @@ export const Lanyard3D: React.FC<Lanyard3DProps> = ({ variant = 'inline' }) => {
   useEffect(() => {
     let cancelled = false;
     const fonts = [
-      '800 17px "JetBrains Mono"',
-      '800 20px "Space Grotesk"',
-      '900 58px "Space Grotesk"',
-      '800 19px "JetBrains Mono"',
-      '800 15px "JetBrains Mono"',
-      '900 48px "Space Grotesk"'
+      '900 20px "JetBrains Mono"',
+      '800 22px "Space Grotesk"',
+      '900 120px "Space Grotesk"',
+      '900 32px "Space Grotesk"',
+      '900 46px "Space Grotesk"',
+      '900 70px "Space Grotesk"',
+      '900 106px "Space Grotesk"'
     ];
 
     Promise.all([
       ...fonts.map((f) => document.fonts.load(f)),
       loadImage('/helton.jpg')
-    ]).then(([_, __, ___, ____, _____, ______, photoImg]) => {
+    ]).then(([_, __, ___, ____, _____, ______, _______, photoImg]) => {
       if (!cancelled) {
         setAssets({
           front: buildFront(photoImg as HTMLImageElement | null),
@@ -636,19 +667,19 @@ export const Lanyard3D: React.FC<Lanyard3DProps> = ({ variant = 'inline' }) => {
           frontImage={assets.front}
           backImage={assets.back}
           strapImage={assets.strap}
-          cardColor="#080a10"
+          cardColor="#04010e"
           finish="glossy"
-          cornerRadius={0.28}
+          cornerRadius={0.25}
           anchor={full ? 'right' : 'center'}
           size={full ? 0.5 : 0.62}
-          strapLength={full ? 0.6 : 0.5}
-          strapColor="#07080a"
-          strapWidth={0.72}
+          strapLength={full ? 0.59 : 0.55}
+          strapColor="#111827"
+          strapWidth={0.62}
           metal="silver"
-          gravity={1}
-          damping={0.5}
-          elasticity={0.5}
-          breeze={0.35}
+          gravity={1.2}
+          damping={0.35}
+          elasticity={0.7}
+          breeze={0.15}
         />
       )}
     </div>
