@@ -365,7 +365,7 @@ function buildFront(photoImg: HTMLImageElement | null): string {
 // --------------------------------------------------------------------------------------
 // FACE POSTERIOR (VERSO) — PÔSTER DE NETWORKING COM SCAN HERE (REFERÊNCIA ALFARI)
 // --------------------------------------------------------------------------------------
-function buildBack(): string {
+function buildBack(qrImg: HTMLImageElement | null): string {
   const [c, ctx] = makeCanvas();
 
   // Fundo grafite profundo com textura técnica
@@ -448,11 +448,24 @@ function buildBack(): string {
   ctx.lineTo(boxX + boxW - 60, boxY + 70);
   ctx.stroke();
 
-  // QR Code central nítido
+  // QR Code central real e escaneável
   const qrSize = 360;
   const qrX = (W - qrSize) / 2;
   const qrY = boxY + 100;
-  drawQr(ctx, qrX, qrY, qrSize, 8);
+
+  if (qrImg) {
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(qrX - 16, qrY - 16, qrSize + 32, qrSize + 32, 16);
+    ctx.fill();
+    ctx.strokeStyle = '#090d16';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+  } else {
+    drawQr(ctx, qrX, qrY, qrSize, 8);
+  }
 
   // Fita de identificação sob o QR Code: "HELTON JUNIOR • Software Engineer"
   const subTagY = qrY + qrSize + 40;
@@ -600,12 +613,13 @@ export const Lanyard3D: React.FC<Lanyard3DProps> = ({ variant = 'inline' }) => {
 
     Promise.all([
       ...fonts.map((f) => document.fonts.load(f)),
-      loadImage('/helton.jpg')
-    ]).then(([_, __, ___, ____, _____, ______, _______, photoImg]) => {
+      loadImage('/helton.jpg'),
+      loadImage('/qr-code.png')
+    ]).then(([_, __, ___, ____, _____, ______, _______, photoImg, qrImg]) => {
       if (!cancelled) {
         setAssets({
           front: buildFront(photoImg as HTMLImageElement | null),
-          back: buildBack(),
+          back: buildBack(qrImg as HTMLImageElement | null),
           strap: buildStrap()
         });
       }
