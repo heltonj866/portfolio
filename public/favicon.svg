@@ -1,7 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="16" fill="#030712"/>
-  <rect x="2" y="2" width="60" height="60" rx="14" stroke="#2563eb" stroke-width="2" stroke-opacity="0.4"/>
-  <path d="M18 24L28 32L18 40" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M34 40H46" stroke="#06b6d4" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="48" cy="20" r="3" fill="#10b981"/>
+  <defs>
+    <linearGradient id="silver-border" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#a1a1aa" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="silver-text" x1="0" y1="0" x2="0" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d4d4d8"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="64" height="64" rx="16" fill="#050505"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" stroke="url(#silver-border)" stroke-width="1.5"/>
+  <!-- HJ Monogram -->
+  <text x="32" y="42" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Space Grotesk', sans-serif" font-size="26" font-weight="800" fill="url(#silver-text)" text-anchor="middle" letter-spacing="-1">HJ</text>
+  <circle cx="51" cy="15" r="2.5" fill="#ffffff" opacity="0.9"/>
 </svg>
