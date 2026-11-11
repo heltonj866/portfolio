@@ -76,44 +76,6 @@ function drawOceanBackdrop(ctx: CanvasRenderingContext2D, x: number, y: number, 
   ctx.restore();
 }
 
-// Elo de corrente cromada metálica 3D nos cantos (idêntico à referência)
-function drawChromeLink(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, angle: number) {
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(angle);
-
-  // Sombra profunda sob a corrente
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-  ctx.shadowBlur = 18;
-  ctx.shadowOffsetX = 8;
-  ctx.shadowOffsetY = 12;
-
-  // Corpo metálico cromado em degradê
-  const grad = ctx.createLinearGradient(-r, -r, r, r);
-  grad.addColorStop(0, '#ffffff');
-  grad.addColorStop(0.2, '#94a3b8');
-  grad.addColorStop(0.4, '#1e293b');
-  grad.addColorStop(0.6, '#cbd5e1');
-  grad.addColorStop(0.85, '#475569');
-  grad.addColorStop(1, '#0f172a');
-
-  ctx.strokeStyle = grad;
-  ctx.lineWidth = 18;
-  ctx.beginPath();
-  ctx.ellipse(0, 0, r, r * 0.55, 0, 0, Math.PI * 2);
-  ctx.stroke();
-
-  // Reset shadow para o brilho especular interno
-  ctx.shadowColor = 'transparent';
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-  ctx.lineWidth = 3.5;
-  ctx.beginPath();
-  ctx.ellipse(0, 0, r - 5, (r - 5) * 0.55, 0, 0, Math.PI * 2);
-  ctx.stroke();
-
-  ctx.restore();
-}
-
 // Código de barras industrial de alta resolução
 function drawBarcode(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, lightMode = false) {
   ctx.save();
@@ -397,10 +359,6 @@ function buildFront(photoImg: HTMLImageElement | null): string {
   ctx.font = '600 16px "JetBrains Mono", monospace';
   ctx.fillText('linkedin.com/in/heltonj866', W / 2, H - 72);
 
-  // 9. ELOS CROMADOS METÁLICOS 3D NOS CANTOS INFERIORES (ESTILO REFERÊNCIA)
-  drawChromeLink(ctx, 84, 1260, 72, -0.42);
-  drawChromeLink(ctx, W - 84, 1260, 72, 0.42);
-
   return c.toDataURL('image/png');
 }
 
@@ -671,15 +629,15 @@ export const Lanyard3D: React.FC<Lanyard3DProps> = ({ variant = 'inline' }) => {
           finish="glossy"
           cornerRadius={0.25}
           anchor={full ? 'right' : 'center'}
-          size={full ? 0.5 : 0.62}
-          strapLength={full ? 0.59 : 0.55}
+          size={full ? 0.5 : 0.64}
+          strapLength={full ? 0.58 : 0.52}
           strapColor="#111827"
-          strapWidth={0.62}
+          strapWidth={0.65}
           metal="silver"
           gravity={1.2}
-          damping={0.35}
-          elasticity={0.7}
-          breeze={0.15}
+          damping={0.65}
+          elasticity={0.35}
+          breeze={0.05}
         />
       )}
     </div>
